@@ -1,0 +1,179 @@
+package gestionbd;
+
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
+
+public class Gestionbd {
+    
+    Connection conexion= null;
+    Statement sentencia=null;
+    ResultSet resultado=null;
+    String NOMBREBD="empresa.sqlite";
+    String URL="jdbc:sqlite:"+NOMBREBD;
+    String DRIVER="org.sqlite.JDBC";
+    
+    public void crearBD(){
+    try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+        System.out.println("Base de datos creada con exito!");
+    }
+    
+    public void crearTabla(){
+    try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="CREATE TABLE CLIENTE"+
+                   "(ID INT PRIMARY KEY NOT NULL, "+
+                   "NOMBRE TEXT NOT NULL, "+
+                   "APELLIDO TEXT NOT NULL, "+
+                   "EDAD INT NOT NULL)";
+        sentencia.executeUpdate(sql);
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+    
+        System.out.println("Tabla creada con exito!");
+    }
+
+public void insertardatos(int id,String nombre,String apellido,int edad){
+    try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="INSERT INTO CLIENTE "
+                   + "(ID,NOMBRE,APELLIDO,EDAD)"+
+                   "VALUES('"+id+"','"+nombre+"','"+apellido+"','"+edad+"')";
+        sentencia.executeUpdate(sql);
+        System.out.println("Datos ingresados");
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+    
+        System.out.println("Datos insertados con exito!");
+}
+
+public void eliminardatos(int id){
+ try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="DELETE FROM CLIENTE WHERE ID ='"+id+"'";
+        sentencia.executeUpdate(sql);
+        System.out.println("Datos  Eliminados");
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+    
+        System.out.println("Datos eliminados con exito!");
+}
+
+public void actualizardatosNOMBRE(int id,String nombre){
+ try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="UPDATE CLIENTE SET NOMBRE ='"+nombre+"' WHERE ID = '"+id+"'";
+        sentencia.executeUpdate(sql);
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+        System.out.println("Datos actualizados con exito!");
+
+}
+public void actualizardatosAPELLIDO(int id,String apellido){
+ try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="UPDATE CLIENTE SET APELLIDO ='"+apellido+"' WHERE ID = '"+id+"'";
+        sentencia.executeUpdate(sql);
+        System.out.println("Datos  actualizados");
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+    
+        System.out.println("Datos actualizados con exito!");
+
+}
+public void actualizardatosEDAD(int id,int edad){
+ try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="UPDATE CLIENTE SET EDAD ='"+edad+"' WHERE ID = '"+id+"'";
+        sentencia.executeUpdate(sql);
+        System.out.println("Datos  actualizados");
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+    
+        System.out.println("Datos actualizados con exito!");
+
+}
+
+public void mostrar(){
+ try{
+    
+        Class.forName(DRIVER);
+        conexion=DriverManager.getConnection(URL);
+        sentencia=conexion.createStatement();
+        String sql="SELECT * FROM CLIENTE";
+        resultado=sentencia.executeQuery(sql);
+        while (resultado.next()) {
+         int id=resultado.getInt("ID");
+         String NOMBRE=resultado.getString("NOMBRE");
+         String APELLIDO=resultado.getString("APELLIDO");
+         int edad=resultado.getInt("EDAD");
+            JOptionPane.showMessageDialog(null,"\n ID: "+id
+                             + "\n NOMBRE:  "+NOMBRE
+                             + "\n APELLIDO:  "+APELLIDO
+                             + "\n EDAD:  "+edad);
+     }
+        
+        sentencia.close();
+        conexion.close();
+        
+    }catch(ClassNotFoundException | SQLException e){
+        System.out.println("ERROR:"+e.getMessage());
+    }
+    
+        System.out.println("Datos actualizados con exito!");
+
+}
+
+}
